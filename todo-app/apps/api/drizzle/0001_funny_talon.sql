@@ -1,0 +1,1 @@
+CREATE INDEX "todos_created_at_idx" ON "todos" USING btree ("created_at");

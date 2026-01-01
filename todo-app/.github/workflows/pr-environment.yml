@@ -1,0 +1,26 @@
+name: PR Environment
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+concurrency:
+  group: pr-env-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+  pull-requests: write
+  security-events: write
+
+jobs:
+  pr-environment:
+    uses: genesluna/k8s-ephemeral-environments/.github/workflows/pr-environment-reusable.yml@main
+    with:
+      pr-number: ${{ github.event.pull_request.number }}
+      pr-action: ${{ github.event.action }}
+      head-sha: ${{ github.event.pull_request.head.sha }}
+      head-ref: ${{ github.head_ref }}
+      repository: ${{ github.repository }}
+    secrets: inherit

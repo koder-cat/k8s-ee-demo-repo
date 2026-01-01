@@ -1,0 +1,23 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "dev:local": "pnpm run local:setup && set -a && . ./.env && set +a && pnpm dev",
+    "local:setup": "docker compose up -d && pnpm run local:env && pnpm run local:wait && pnpm run local:migrate",
+    "local:env": "test -f .env || cp .env.example .env",
+    "local:wait": "echo 'Waiting for PostgreSQL...' && timeout=30 && elapsed=0 && until docker compose exec -T postgres pg_isready -U app -d app > /dev/null 2>&1; do sleep 1; elapsed=$((elapsed+1)); if [ $elapsed -ge $timeout ]; then echo 'Timeout' && exit 1; fi; done && echo 'Ready!'",
+    "local:migrate": "set -a && . ./.env && set +a && pnpm --filter @todo-app/api db:migrate",
+    "teardown": "docker compose down",
+    "teardown:clean": "docker compose down -v",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.26.2"
+}
