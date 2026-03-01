@@ -40,4 +40,4 @@ When you open a PR, the GitHub Action will automatically:
 
 Preview URL format: `https://todo-app-pr-{number}.k8s-ee.genesluna.dev`
 
-When the PR is closed, the environment is automatically destroyed.
+When the PR is closed, the environment is automatically destroyed...
